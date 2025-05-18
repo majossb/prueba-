@@ -281,6 +281,18 @@ public class ReservaServiceImpl implements ReservaService {
         return reservasSolapadas.isEmpty();
     }
 
+       @Override
+    @Transactional(readOnly = true)
+    public List<ReservaDto> getReservasByUsuario(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        return reservaRepository.findByUsuarioId(usuario.getId())
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     private ReservaDto convertToDto(Reserva reserva) {
         ReservaDto reservaDto = new ReservaDto();
         reservaDto.setId(reserva.getId());

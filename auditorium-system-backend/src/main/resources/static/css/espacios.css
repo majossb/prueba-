@@ -1,0 +1,74 @@
+  .espacios-subtitle {
+    font-size: 14px;
+    color: #6b6b6b;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .espacios-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #11154d;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .espacio-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+
+  .espacio-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .espacio-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .espacio-body {
+    padding: 20px;
+    text-align: left;
+  }
+
+  .espacio-header h5 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #11154d;
+    margin-bottom: 5px;
+  }
+
+  .espacio-precio {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .espacio-detalles {
+    font-size: 14px;
+    color: #666;
+  }
+
+  .btn-mas {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #000;
+    font-size: 32px;
+    font-weight: bold;
+    color: #000;
+    background-color: transparent;
+    transition: all 0.3s ease;
+  }
+
+  .btn-mas:hover {
+    background-color: #000;
+    color: #fff;
+  }

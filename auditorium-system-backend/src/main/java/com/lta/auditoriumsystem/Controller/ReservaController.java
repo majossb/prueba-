@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -36,8 +37,9 @@ public class ReservaController {
     }
 
     @GetMapping("/mis-reservas")
-    public ResponseEntity<List<ReservaDto>> getMisReservas() {
-        List<ReservaDto> reservas = reservaService.getReservasByUsuario();
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<ReservaDto>> getMisReservas(Principal principal) {
+        List<ReservaDto> reservas = reservaService.getReservasByUsuario(principal.getName());
         return ResponseEntity.ok(reservas);
     }
 
@@ -99,4 +101,4 @@ public class ReservaController {
         boolean disponible = reservaService.isAuditorioDisponible(auditorioId, reservaDto);
         return ResponseEntity.ok(disponible);
     }
-}
+} 

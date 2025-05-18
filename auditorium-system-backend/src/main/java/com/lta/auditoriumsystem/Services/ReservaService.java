@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ReservaService {
     List<ReservaDto> getAllReservas();
+    List<ReservaDto> getReservasByUsuario(String email);
     ReservaDto getReservaById(Long id) throws ResourceNotFoundException;
     ReservaDto createReserva(ReservaDto reservaDTO) throws ResourceNotFoundException;
     ReservaDto updateReserva(Long id, ReservaDto reservaDTO) throws ResourceNotFoundException;

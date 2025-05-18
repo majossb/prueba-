@@ -7,18 +7,18 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.lang.NonNull;
 
 import java.io.IOException;
 
 @Component
-public class JwtRequestFilter extends OncePerRequestFilter { 
+public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private UsuarioServiceImpl usuarioServiceImpl;
@@ -27,11 +27,30 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+
+        // 🔍 Mostrar por consola la ruta que está pasando por el filtro
+        System.out.println("Ruta solicitada: " + path);
+
+        return path.equals("/") ||
+               path.equals("/index") ||
+               path.equals("/login") ||
+               path.equals("/register") ||
+               path.equals("/favicon.ico") ||
+               path.startsWith("/css/") ||
+               path.startsWith("/js/") ||
+               path.startsWith("/images/") ||
+               path.startsWith("/api/auth/") ||
+               path.startsWith("/api/testimonios/") ||
+               path.startsWith("/testimonios/");
+    }
+
+    @Override
     protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain chain)
-            throws ServletException, IOException {
+        @NonNull HttpServletRequest request,
+        @NonNull HttpServletResponse response,
+        @NonNull FilterChain chain) throws ServletException, IOException {
 
         final String token = jwtTokenUtil.getJwtFromRequest(request);
 
@@ -43,14 +62,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     UserDetails userDetails = usuarioServiceImpl.loadUserByUsername(username);
 
                     if (jwtTokenUtil.validateToken(token, userDetails)) {
-                        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities());
+                        UsernamePasswordAuthenticationToken authenticationToken =
+                                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     }
                 }
             } catch (Exception e) {
-                logger.error("No se pudo establecer la autenticación del usuario: " + e.getMessage());
+                logger.error("Error de autenticación JWT: " + e.getMessage());
             }
         }
 
